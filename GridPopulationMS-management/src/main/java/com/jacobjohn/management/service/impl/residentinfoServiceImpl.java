@@ -3,21 +3,21 @@ package com.jacobjohn.management.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.jacobjohn.management.mapper.ResidentinfoMapper;
-import com.jacobjohn.management.domain.Residentinfo;
-import com.jacobjohn.management.service.IResidentinfoService;
+import com.jacobjohn.management.mapper.residentinfoMapper;
+import com.jacobjohn.management.domain.residentinfo;
+import com.jacobjohn.management.service.IresidentinfoService;
 
 /**
  * 居民信息Service业务层处理
  * 
  * @author JacobJohn
- * @date 2023-02-27
+ * @date 2023-03-04
  */
 @Service
-public class ResidentinfoServiceImpl implements IResidentinfoService 
+public class residentinfoServiceImpl implements IresidentinfoService 
 {
     @Autowired
-    private ResidentinfoMapper residentinfoMapper;
+    private residentinfoMapper residentinfoMapper;
 
     /**
      * 查询居民信息
@@ -26,9 +26,9 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 居民信息
      */
     @Override
-    public Residentinfo selectResidentinfoByIdcardInfo(String idcardInfo)
+    public residentinfo selectresidentinfoByIdcardInfo(String idcardInfo)
     {
-        return residentinfoMapper.selectResidentinfoByIdcardInfo(idcardInfo);
+        return residentinfoMapper.selectresidentinfoByIdcardInfo(idcardInfo);
     }
 
     /**
@@ -38,9 +38,9 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 居民信息
      */
     @Override
-    public List<Residentinfo> selectResidentinfoList(Residentinfo residentinfo)
+    public List<residentinfo> selectresidentinfoList(residentinfo residentinfo)
     {
-        return residentinfoMapper.selectResidentinfoList(residentinfo);
+        return residentinfoMapper.selectresidentinfoList(residentinfo);
     }
 
     /**
@@ -50,9 +50,9 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 结果
      */
     @Override
-    public int insertResidentinfo(Residentinfo residentinfo)
+    public int insertresidentinfo(residentinfo residentinfo)
     {
-        return residentinfoMapper.insertResidentinfo(residentinfo);
+        return residentinfoMapper.insertresidentinfo(residentinfo);
     }
 
     /**
@@ -62,9 +62,9 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 结果
      */
     @Override
-    public int updateResidentinfo(Residentinfo residentinfo)
+    public int updateresidentinfo(residentinfo residentinfo)
     {
-        return residentinfoMapper.updateResidentinfo(residentinfo);
+        return residentinfoMapper.updateresidentinfo(residentinfo);
     }
 
     /**
@@ -74,9 +74,9 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 结果
      */
     @Override
-    public int deleteResidentinfoByIdcardInfos(String[] idcardInfos)
+    public int deleteresidentinfoByIdcardInfos(String[] idcardInfos)
     {
-        return residentinfoMapper.deleteResidentinfoByIdcardInfos(idcardInfos);
+        return residentinfoMapper.deleteresidentinfoByIdcardInfos(idcardInfos);
     }
 
     /**
@@ -86,8 +86,8 @@ public class ResidentinfoServiceImpl implements IResidentinfoService
      * @return 结果
      */
     @Override
-    public int deleteResidentinfoByIdcardInfo(String idcardInfo)
+    public int deleteresidentinfoByIdcardInfo(String idcardInfo)
     {
-        return residentinfoMapper.deleteResidentinfoByIdcardInfo(idcardInfo);
+        return residentinfoMapper.deleteresidentinfoByIdcardInfo(idcardInfo);
     }
 }

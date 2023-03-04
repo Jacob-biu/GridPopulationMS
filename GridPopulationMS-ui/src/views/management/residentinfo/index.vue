@@ -48,14 +48,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="职业" prop="pJob">
-        <el-select v-model="queryParams.pJob" placeholder="请选择职业" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_job"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+        <el-input
+          v-model="queryParams.pJob"
+          placeholder="请输入职业"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="住址" prop="pAddress">
         <el-input
@@ -174,11 +172,7 @@
           <dict-tag :options="dict.type.sys_nation" :value="scope.row.pNation"/>
         </template>
       </el-table-column>
-      <el-table-column label="职业" align="center" prop="pJob">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_job" :value="scope.row.pJob"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="职业" align="center" prop="pJob" />
       <el-table-column label="住址" align="center" prop="pAddress" />
       <el-table-column label="联系电话" align="center" prop="pPhone" />
       <el-table-column label="政治面貌" align="center" prop="pParty">
@@ -216,7 +210,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -265,14 +259,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="职业" prop="pJob">
-          <el-select v-model="form.pJob" placeholder="请选择职业">
-            <el-option
-              v-for="dict in dict.type.sys_job"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
+          <el-input v-model="form.pJob" placeholder="请输入职业" />
         </el-form-item>
         <el-form-item label="住址" prop="pAddress">
           <el-input v-model="form.pAddress" placeholder="请输入住址" />
@@ -311,7 +298,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="pNotice">
-          <el-input v-model="form.pNotice" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.pNotice" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -327,12 +314,9 @@ import { listResidentinfo, getResidentinfo, delResidentinfo, addResidentinfo, up
 
 export default {
   name: "Residentinfo",
-  dicts: ['sys_politic', 'sys_older', 'sys_user_sex', 'sys_idcardtype', 'sys_job', 'sys_familynum', 'sys_nation'],
+  dicts: ['sys_politic', 'sys_older', 'sys_user_sex', 'sys_idcardtype', 'sys_familynum', 'sys_nation'],
   data() {
     return {
-
-      // 默认是新增channel
-      isAdd: true,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -366,7 +350,6 @@ export default {
         pParty: null,
         pFamilynum: null,
         pOlder: null,
-        pNotice: null
       },
       // 表单参数
       form: {},
@@ -387,11 +370,20 @@ export default {
         pNation: [
           { required: true, message: "国籍不能为空", trigger: "change" }
         ],
+        pJob: [
+          { required: true, message: "职业不能为空", trigger: "blur" }
+        ],
         pAddress: [
           { required: true, message: "住址不能为空", trigger: "blur" }
         ],
         pPhone: [
           { required: true, message: "联系电话不能为空", trigger: "blur" }
+        ],
+        pParty: [
+          { required: true, message: "政治面貌不能为空", trigger: "change" }
+        ],
+        pFamilynum: [
+          { required: true, message: "家庭人数不能为空", trigger: "change" }
         ],
         pOlder: [
           { required: true, message: "是否高龄不能为空", trigger: "change" }
@@ -455,7 +447,6 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.isAdd = true;
       this.title = "添加居民信息";
     },
     /** 修改按钮操作 */
@@ -465,7 +456,6 @@ export default {
       getResidentinfo(idcardInfo).then(response => {
         this.form = response.data;
         this.open = true;
-        this.isAdd = false;
         this.title = "修改居民信息";
       });
     },
@@ -473,7 +463,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.isAdd == false) {
+          if (this.form.idcardInfo != null) {
             updateResidentinfo(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;

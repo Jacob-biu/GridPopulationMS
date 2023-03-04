@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jacobjohn.management.mapper.ResidentinfoMapper">
+<mapper namespace="com.jacobjohn.management.mapper.residentinfoMapper">
     
-    <resultMap type="Residentinfo" id="ResidentinfoResult">
+    <resultMap type="residentinfo" id="residentinfoResult">
         <result property="pName"    column="p_name"    />
         <result property="idcardType"    column="idCard_type"    />
         <result property="idcardInfo"    column="idCard_info"    />
@@ -19,34 +19,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="pNotice"    column="p_notice"    />
     </resultMap>
 
-    <sql id="selectResidentinfoVo">
+    <sql id="selectresidentinfoVo">
         select p_name, idCard_type, idCard_info, p_sex, p_nation, p_job, p_address, p_phone, p_party, p_familyNum, p_older, p_notice from table_residentinfo
     </sql>
 
-    <select id="selectResidentinfoList" parameterType="Residentinfo" resultMap="ResidentinfoResult">
-        <include refid="selectResidentinfoVo"/>
+    <select id="selectresidentinfoList" parameterType="residentinfo" resultMap="residentinfoResult">
+        <include refid="selectresidentinfoVo"/>
         <where>  
             <if test="pName != null  and pName != ''"> and p_name like concat('%', #{pName}, '%')</if>
             <if test="idcardType != null "> and idCard_type = #{idcardType}</if>
-            <if test="idcardInfo != null  and idcardInfo != ''"> and idCard_info like concat('%', #{idcardInfo}, '%')</if>
+            <if test="idcardInfo != null  and idcardInfo != ''"> and idCard_info = #{idcardInfo}</if>
             <if test="pSex != null "> and p_sex = #{pSex}</if>
             <if test="pNation != null "> and p_nation = #{pNation}</if>
-            <if test="pJob != null "> and p_job = #{pJob}</if>
+            <if test="pJob != null  and pJob != ''"> and p_job like concat('%', #{pJob}, '%')</if>
             <if test="pAddress != null  and pAddress != ''"> and p_address like concat('%', #{pAddress}, '%')</if>
             <if test="pPhone != null  and pPhone != ''"> and p_phone = #{pPhone}</if>
             <if test="pParty != null "> and p_party = #{pParty}</if>
             <if test="pFamilynum != null "> and p_familyNum = #{pFamilynum}</if>
             <if test="pOlder != null "> and p_older = #{pOlder}</if>
-            <if test="pNotice != null  and pNotice != ''"> and p_notice = #{pNotice}</if>
         </where>
     </select>
     
-    <select id="selectResidentinfoByIdcardInfo" parameterType="String" resultMap="ResidentinfoResult">
-        <include refid="selectResidentinfoVo"/>
+    <select id="selectresidentinfoByIdcardInfo" parameterType="String" resultMap="residentinfoResult">
+        <include refid="selectresidentinfoVo"/>
         where idCard_info = #{idcardInfo}
     </select>
         
-    <insert id="insertResidentinfo" parameterType="Residentinfo">
+    <insert id="insertresidentinfo" parameterType="residentinfo">
         insert into table_residentinfo
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="pName != null and pName != ''">p_name,</if>
@@ -54,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idcardInfo != null and idcardInfo != ''">idCard_info,</if>
             <if test="pSex != null">p_sex,</if>
             <if test="pNation != null">p_nation,</if>
-            <if test="pJob != null">p_job,</if>
+            <if test="pJob != null and pJob != ''">p_job,</if>
             <if test="pAddress != null and pAddress != ''">p_address,</if>
             <if test="pPhone != null and pPhone != ''">p_phone,</if>
             <if test="pParty != null">p_party,</if>
@@ -68,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idcardInfo != null and idcardInfo != ''">#{idcardInfo},</if>
             <if test="pSex != null">#{pSex},</if>
             <if test="pNation != null">#{pNation},</if>
-            <if test="pJob != null">#{pJob},</if>
+            <if test="pJob != null and pJob != ''">#{pJob},</if>
             <if test="pAddress != null and pAddress != ''">#{pAddress},</if>
             <if test="pPhone != null and pPhone != ''">#{pPhone},</if>
             <if test="pParty != null">#{pParty},</if>
@@ -78,14 +77,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateResidentinfo" parameterType="Residentinfo">
+    <update id="updateresidentinfo" parameterType="residentinfo">
         update table_residentinfo
         <trim prefix="SET" suffixOverrides=",">
             <if test="pName != null and pName != ''">p_name = #{pName},</if>
             <if test="idcardType != null">idCard_type = #{idcardType},</if>
             <if test="pSex != null">p_sex = #{pSex},</if>
             <if test="pNation != null">p_nation = #{pNation},</if>
-            <if test="pJob != null">p_job = #{pJob},</if>
+            <if test="pJob != null and pJob != ''">p_job = #{pJob},</if>
             <if test="pAddress != null and pAddress != ''">p_address = #{pAddress},</if>
             <if test="pPhone != null and pPhone != ''">p_phone = #{pPhone},</if>
             <if test="pParty != null">p_party = #{pParty},</if>
@@ -96,11 +95,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where idCard_info = #{idcardInfo}
     </update>
 
-    <delete id="deleteResidentinfoByIdcardInfo" parameterType="String">
+    <delete id="deleteresidentinfoByIdcardInfo" parameterType="String">
         delete from table_residentinfo where idCard_info = #{idcardInfo}
     </delete>
 
-    <delete id="deleteResidentinfoByIdcardInfos" parameterType="String">
+    <delete id="deleteresidentinfoByIdcardInfos" parameterType="String">
         delete from table_residentinfo where idCard_info in 
         <foreach item="idcardInfo" collection="array" open="(" separator="," close=")">
             #{idcardInfo}

@@ -16,8 +16,8 @@ import com.jacobjohn.common.annotation.Log;
 import com.jacobjohn.common.core.controller.BaseController;
 import com.jacobjohn.common.core.domain.AjaxResult;
 import com.jacobjohn.common.enums.BusinessType;
-import com.jacobjohn.management.domain.Residentinfo;
-import com.jacobjohn.management.service.IResidentinfoService;
+import com.jacobjohn.management.domain.residentinfo;
+import com.jacobjohn.management.service.IresidentinfoService;
 import com.jacobjohn.common.utils.poi.ExcelUtil;
 import com.jacobjohn.common.core.page.TableDataInfo;
 
@@ -25,24 +25,24 @@ import com.jacobjohn.common.core.page.TableDataInfo;
  * 居民信息Controller
  * 
  * @author JacobJohn
- * @date 2023-02-27
+ * @date 2023-03-04
  */
 @RestController
 @RequestMapping("/management/residentinfo")
-public class ResidentinfoController extends BaseController
+public class residentinfoController extends BaseController
 {
     @Autowired
-    private IResidentinfoService residentinfoService;
+    private IresidentinfoService residentinfoService;
 
     /**
      * 查询居民信息列表
      */
     @PreAuthorize("@ss.hasPermi('management:residentinfo:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Residentinfo residentinfo)
+    public TableDataInfo list(residentinfo residentinfo)
     {
         startPage();
-        List<Residentinfo> list = residentinfoService.selectResidentinfoList(residentinfo);
+        List<residentinfo> list = residentinfoService.selectresidentinfoList(residentinfo);
         return getDataTable(list);
     }
 
@@ -52,10 +52,10 @@ public class ResidentinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('management:residentinfo:export')")
     @Log(title = "居民信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Residentinfo residentinfo)
+    public void export(HttpServletResponse response, residentinfo residentinfo)
     {
-        List<Residentinfo> list = residentinfoService.selectResidentinfoList(residentinfo);
-        ExcelUtil<Residentinfo> util = new ExcelUtil<Residentinfo>(Residentinfo.class);
+        List<residentinfo> list = residentinfoService.selectresidentinfoList(residentinfo);
+        ExcelUtil<residentinfo> util = new ExcelUtil<residentinfo>(residentinfo.class);
         util.exportExcel(response, list, "居民信息数据");
     }
 
@@ -66,7 +66,7 @@ public class ResidentinfoController extends BaseController
     @GetMapping(value = "/{idcardInfo}")
     public AjaxResult getInfo(@PathVariable("idcardInfo") String idcardInfo)
     {
-        return success(residentinfoService.selectResidentinfoByIdcardInfo(idcardInfo));
+        return success(residentinfoService.selectresidentinfoByIdcardInfo(idcardInfo));
     }
 
     /**
@@ -75,9 +75,9 @@ public class ResidentinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('management:residentinfo:add')")
     @Log(title = "居民信息", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Residentinfo residentinfo)
+    public AjaxResult add(@RequestBody residentinfo residentinfo)
     {
-        return toAjax(residentinfoService.insertResidentinfo(residentinfo));
+        return toAjax(residentinfoService.insertresidentinfo(residentinfo));
     }
 
     /**
@@ -86,9 +86,9 @@ public class ResidentinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('management:residentinfo:edit')")
     @Log(title = "居民信息", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Residentinfo residentinfo)
+    public AjaxResult edit(@RequestBody residentinfo residentinfo)
     {
-        return toAjax(residentinfoService.updateResidentinfo(residentinfo));
+        return toAjax(residentinfoService.updateresidentinfo(residentinfo));
     }
 
     /**
@@ -99,6 +99,6 @@ public class ResidentinfoController extends BaseController
 	@DeleteMapping("/{idcardInfos}")
     public AjaxResult remove(@PathVariable String[] idcardInfos)
     {
-        return toAjax(residentinfoService.deleteResidentinfoByIdcardInfos(idcardInfos));
+        return toAjax(residentinfoService.deleteresidentinfoByIdcardInfos(idcardInfos));
     }
 }

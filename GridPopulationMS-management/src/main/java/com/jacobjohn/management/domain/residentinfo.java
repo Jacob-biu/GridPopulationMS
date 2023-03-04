@@ -9,9 +9,9 @@ import com.jacobjohn.common.core.domain.BaseEntity;
  * 居民信息对象 table_residentinfo
  * 
  * @author JacobJohn
- * @date 2023-02-27
+ * @date 2023-03-04
  */
-public class Residentinfo extends BaseEntity
+public class residentinfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class Residentinfo extends BaseEntity
 
     /** 职业 */
     @Excel(name = "职业")
-    private Integer pJob;
+    private String pJob;
 
     /** 住址 */
     @Excel(name = "住址")
@@ -108,12 +108,12 @@ public class Residentinfo extends BaseEntity
     {
         return pNation;
     }
-    public void setpJob(Integer pJob) 
+    public void setpJob(String pJob) 
     {
         this.pJob = pJob;
     }
 
-    public Integer getpJob() 
+    public String getpJob() 
     {
         return pJob;
     }

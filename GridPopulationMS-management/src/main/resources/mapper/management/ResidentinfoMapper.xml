@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jacobjohn.management.mapper.ResidentinfoMapper">
+    
+    <resultMap type="Residentinfo" id="ResidentinfoResult">
+        <result property="pName"    column="p_name"    />
+        <result property="idcardType"    column="idCard_type"    />
+        <result property="idcardInfo"    column="idCard_info"    />
+        <result property="pSex"    column="p_sex"    />
+        <result property="pNation"    column="p_nation"    />
+        <result property="pJob"    column="p_job"    />
+        <result property="pAddress"    column="p_address"    />
+        <result property="pPhone"    column="p_phone"    />
+        <result property="pParty"    column="p_party"    />
+        <result property="pFamilynum"    column="p_familyNum"    />
+        <result property="pOlder"    column="p_older"    />
+        <result property="pNotice"    column="p_notice"    />
+    </resultMap>
+
+    <sql id="selectResidentinfoVo">
+        select p_name, idCard_type, idCard_info, p_sex, p_nation, p_job, p_address, p_phone, p_party, p_familyNum, p_older, p_notice from table_residentinfo
+    </sql>
+
+    <select id="selectResidentinfoList" parameterType="Residentinfo" resultMap="ResidentinfoResult">
+        <include refid="selectResidentinfoVo"/>
+        <where>  
+            <if test="pName != null  and pName != ''"> and p_name like concat('%', #{pName}, '%')</if>
+            <if test="idcardType != null "> and idCard_type = #{idcardType}</if>
+            <if test="idcardInfo != null  and idcardInfo != ''"> and idCard_info like concat('%', #{idcardInfo}, '%')</if>
+            <if test="pSex != null "> and p_sex = #{pSex}</if>
+            <if test="pNation != null "> and p_nation = #{pNation}</if>
+            <if test="pJob != null "> and p_job = #{pJob}</if>
+            <if test="pAddress != null  and pAddress != ''"> and p_address like concat('%', #{pAddress}, '%')</if>
+            <if test="pPhone != null  and pPhone != ''"> and p_phone = #{pPhone}</if>
+            <if test="pParty != null "> and p_party = #{pParty}</if>
+            <if test="pFamilynum != null "> and p_familyNum = #{pFamilynum}</if>
+            <if test="pOlder != null "> and p_older = #{pOlder}</if>
+            <if test="pNotice != null  and pNotice != ''"> and p_notice = #{pNotice}</if>
+        </where>
+    </select>
+    
+    <select id="selectResidentinfoByIdcardInfo" parameterType="String" resultMap="ResidentinfoResult">
+        <include refid="selectResidentinfoVo"/>
+        where idCard_info = #{idcardInfo}
+    </select>
+        
+    <insert id="insertResidentinfo" parameterType="Residentinfo">
+        insert into table_residentinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pName != null and pName != ''">p_name,</if>
+            <if test="idcardType != null">idCard_type,</if>
+            <if test="idcardInfo != null and idcardInfo != ''">idCard_info,</if>
+            <if test="pSex != null">p_sex,</if>
+            <if test="pNation != null">p_nation,</if>
+            <if test="pJob != null">p_job,</if>
+            <if test="pAddress != null and pAddress != ''">p_address,</if>
+            <if test="pPhone != null and pPhone != ''">p_phone,</if>
+            <if test="pParty != null">p_party,</if>
+            <if test="pFamilynum != null">p_familyNum,</if>
+            <if test="pOlder != null">p_older,</if>
+            <if test="pNotice != null">p_notice,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pName != null and pName != ''">#{pName},</if>
+            <if test="idcardType != null">#{idcardType},</if>
+            <if test="idcardInfo != null and idcardInfo != ''">#{idcardInfo},</if>
+            <if test="pSex != null">#{pSex},</if>
+            <if test="pNation != null">#{pNation},</if>
+            <if test="pJob != null">#{pJob},</if>
+            <if test="pAddress != null and pAddress != ''">#{pAddress},</if>
+            <if test="pPhone != null and pPhone != ''">#{pPhone},</if>
+            <if test="pParty != null">#{pParty},</if>
+            <if test="pFamilynum != null">#{pFamilynum},</if>
+            <if test="pOlder != null">#{pOlder},</if>
+            <if test="pNotice != null">#{pNotice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateResidentinfo" parameterType="Residentinfo">
+        update table_residentinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pName != null and pName != ''">p_name = #{pName},</if>
+            <if test="idcardType != null">idCard_type = #{idcardType},</if>
+            <if test="pSex != null">p_sex = #{pSex},</if>
+            <if test="pNation != null">p_nation = #{pNation},</if>
+            <if test="pJob != null">p_job = #{pJob},</if>
+            <if test="pAddress != null and pAddress != ''">p_address = #{pAddress},</if>
+            <if test="pPhone != null and pPhone != ''">p_phone = #{pPhone},</if>
+            <if test="pParty != null">p_party = #{pParty},</if>
+            <if test="pFamilynum != null">p_familyNum = #{pFamilynum},</if>
+            <if test="pOlder != null">p_older = #{pOlder},</if>
+            <if test="pNotice != null">p_notice = #{pNotice},</if>
+        </trim>
+        where idCard_info = #{idcardInfo}
+    </update>
+
+    <delete id="deleteResidentinfoByIdcardInfo" parameterType="String">
+        delete from table_residentinfo where idCard_info = #{idcardInfo}
+    </delete>
+
+    <delete id="deleteResidentinfoByIdcardInfos" parameterType="String">
+        delete from table_residentinfo where idCard_info in 
+        <foreach item="idcardInfo" collection="array" open="(" separator="," close=")">
+            #{idcardInfo}
+        </foreach>
+    </delete>
+</mapper>

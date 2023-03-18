@@ -1,5 +1,4 @@
-Application Version: ${application.formatted-version}
-
+Application Version: ${gridpopulationms.version}
 Spring Boot Version: ${spring-boot.version}
 ///////////////////////////////////////////////////
 //　　　　                 ｜                      //

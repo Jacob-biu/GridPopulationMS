@@ -1,5 +1,5 @@
 # 项目相关配置
-grid-population-ms:
+gridpopulationms:
   # 名称
   name: GridPopulationMS
   # 版本

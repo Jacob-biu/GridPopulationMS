@@ -1,5 +1,25 @@
 <template>
-  <div id="map-container"></div>
+  <div>
+    <div id="map-container">
+      <div class="search-bar" id="search_bar">
+        <el-input v-model="searchKeyword" placeholder="请输入地址"></el-input>
+        <el-button @click="search" >搜索</el-button>
+      </div>
+      <div id="panel" v-show="showSearchPanel">
+        <div id="result">
+          <ul>
+            <li v-for="(item, index) in searchResult" :key="index">
+              <a href="#" @click="goTo(item)">{{ item.name }}</a>
+            </li>
+          </ul>
+        </div>
+        <div id="operation">
+          <el-button @click="nextPage">下一页</el-button>
+          <el-button @click="toggleSearchPanel">关闭</el-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -11,6 +31,11 @@ export default {
       map: null,
       markers:[],
       infoWindow: null, // 信息窗口实例
+      showSearchPanel: false,
+      searchKeyword: '',
+      searchResult: [],
+      currentPage: 0,
+      pageSize: 8,
     };
   },
   mounted() {
@@ -61,10 +86,11 @@ export default {
             position: lnglat,
           });
 
-          this.map.add(marker);
+          // this.map.add(marker);
           this.markers.push(marker);
           // 将地图中心点移动到被点击的地点
           this.map.setCenter(lnglat);
+          this.map.add(marker);
 
           // 使用地理编码插件获取地点信息
           const geocoder = new AMap.Geocoder({
@@ -91,7 +117,85 @@ export default {
       })
     },
 
+    search() {
+      this.showSearchPanel = true;
+      const keywords = this.searchKeyword;
+      const map = this.map;
+      if (!map) {
+        return;
+      }
 
+      AMap.plugin(["AMap.PlaceSearch"], () => {
+        const placeSearch = new AMap.PlaceSearch({
+          pageSize: this.pageSize,
+          pageIndex: this.currentPage,
+          city: "",
+          map: map,
+          panel: "result",
+        });
+
+        placeSearch.search(keywords, (status, result) => {
+          if (status === "complete" && result.info === "OK") {
+            const poiList = result.poiList;
+            if (poiList && poiList.length > 0) {
+              this.searchResult = poiList;
+              const poi = poiList[0];
+              const location = poi.location;
+              const marker = new AMap.Marker({
+                position: location,
+                title: poi.name,
+              });
+              map.setCenter(location);
+              map.clearMap();
+              marker.setMap(map);
+            }
+          }
+        });
+      });
+    },
+
+    toggleSearchPanel() {
+      this.showSearchPanel = !this.showSearchPanel;
+    },
+
+    nextPage() {
+      this.currentPage++;
+      const map = this.map;
+      if (!map) {
+        return;
+      }
+
+      AMap.plugin(["AMap.PlaceSearch"], () => {
+        const placeSearch = new AMap.PlaceSearch({
+          pageSize: this.pageSize,
+          pageIndex: this.currentPage,
+          city: "",
+          map: map,
+          panel: "result",
+        });
+
+        placeSearch.search(this.searchText, (status, result) => {
+          if (status === "complete" && result.info === "OK") {
+            const poiList = result.poiList;
+            if (poiList && poiList.length > 0) {
+              this.searchResult = poiList;
+            }
+          }
+        });
+      });
+    },
+
+    goTo(item) {
+      const location = item.location;
+      const marker = new AMap.Marker({
+        position: location,
+        title: item.name,
+      });
+      this.map.setCenter(location);
+      this.map.clearMap();
+      marker.setMap(this.map);
+      this.showSearchPanel = false;
+    },
   },
 
 };
@@ -102,12 +206,39 @@ export default {
   position:absolute;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 #search_bar{
+  display: flex;
   width: 25%;
   position: relative;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  z-index: 2;
   background-color: #e7eaec00;
+}
+#panel{
+  display: inherit;
+  width: 25%;
+  position: relative;
+  z-index: 2;
+}
+#result{
+  top: 40px;
+  left: 0;
+  right: 0;
+  background: #e1f3fbe0;
+  /*border: 1px solid #ccc;*/
+  border-top: none;
+  overflow-y: auto;
+  max-height: 400px; /* 控制搜索面板最大高度，超出部分显示滚动条 */
+}
+#operation{
+  background-color: #e1f3fbe0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

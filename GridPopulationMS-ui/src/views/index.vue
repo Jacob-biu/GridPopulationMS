@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       map: null,
+      markers:[],
       searchValue: "",
       searchResults: []
     };
@@ -36,18 +37,33 @@ export default {
           "version": ''  // Loca 版本
         },
       }).then((AMap)=>{
-        const buildings = new AMap.Buildings({
-          'zooms': [16, 18],
-          'heightFactor': 2//2倍于默认高度，3D下有效
-        });//楼块图层
+
+        // const buildings = new AMap.Buildings({
+        //   'zooms': [16, 18],
+        //   'heightFactor': 2//2倍于默认高度，3D下有效
+        // });//楼块图层
 
         this.map = new AMap.Map("map-container",{  //设置地图容器id
           viewMode:"3D",    //是否为3D地图模式
           zoom:15,           //初始化地图级别
           zooms: [2, 22],
           center:[118.7703,32.0816], //初始化地图中心点位置,
-          layers: [new AMap.TileLayer(),//高德默认标准图层
-            buildings],
+          // layers: [new AMap.TileLayer(),//高德默认标准图层
+          //   buildings],
+        });
+
+        // 添加地图点击事件监听器
+        this.map.on("click", (event) => {
+          // 移除之前的标记点
+          this.map.remove(this.markers);
+          // 添加新的标记点
+          const marker = new AMap.Marker({
+            position: event.lnglat,
+          });
+          this.markers.push(marker);
+          this.map.add(marker);
+          // 将地图中心点移动到被点击的地点
+          this.map.setCenter(event.lnglat);
         });
 
       }).catch(e=>{
